@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GCS</title>
+    <link rel="stylesheet" href="lib/css/all.min.css">
+    <link rel="stylesheet" href="lib/css/fontawesome.min.css">
+    <link rel="stylesheet" href="lib/css/solid.min.css">
+    <link rel="stylesheet" href="lib/css/leaflet.css" />
+    <link rel="stylesheet" href="onepage.css">
+    <script src="lib/js/leaflet.js"></script>
+    <script src="lib/js/chart.js"></script>
+    <script src="onepage.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="logoTeam">
+            <div class="logo">
+                <img src="Janus Logo.png" alt="JANUS Logo">
+            </div>
+            <div class="team">Team ID: 3101</div>
+            <div class="bits-logo">
+                <img src="BITS_Pilani-Logo.svg.png" alt="BITS Pilani Logo">
+            </div>
+            <div class="flag">
+                <img src="india-flag-round-shape-png.webp" alt="Flag of India">
+            </div>
+        </div>
+
+        <div class="state-container">
+            <div class="currState">
+                <div class="button">
+                    <button class="restart" type="restart"><i class="fa-solid fa-power-off"></i></button>
+                    <button class="theme-toggle" type="button"><i class="fa-solid fa-circle-half-stroke"></i></button>
+                    <button class="simulation-btn" type="button">SIMULATION</button>
+                    <input type="file" id="csv-upload" accept=".txt" style="display: none;">
+                </div>
+                <div class="state">
+                    <span class="status" id="state3"></span>
+                    <span class="state-name">Launch Pad</span>
+                </div>
+                <div class="state">
+                    <span class="status" id="state1"></span>
+                    <span class="state-name">Ascent</span>
+                </div>
+                <div class="state">
+                    <span class="status" id="state2"></span>
+                    <span class="state-name">Apogee</span>
+                </div>
+                <div class="state">
+                    <span class="status" id="state5"></span>
+                    <span class="state-name">Descent</span>
+                </div>
+                <div class="state">
+                    <span class="status" id="state6"></span>
+                    <span class="state-name">Probe Released</span>
+                </div>
+                <div class="state">
+                    <span class="status" id="state7"></span>
+                    <span class="state-name">Landed</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="content-container">
+            <div class="left-section">
+                <div class="graph-container">
+                    <div class="grid1">
+                        <canvas class="graph" id="line-chart1" style="height: 186px;"></canvas>
+                        <canvas class="graph" id="line-chart2" style="height: 186px;"></canvas>
+                        <canvas class="graph" id="line-chart3" style="height: 186px;"></canvas>
+                    </div>
+                    <div class="grid2">
+                        <canvas class="graph" id="line-chart4" style="height: 186px;"></canvas>
+                        <canvas class="graph" id="line-chart5" style="height: 186px;"></canvas>
+                        <canvas class="graph" id="line-chart9" style="height: 186px;"></canvas>
+                    </div>
+                    <div class="grid3">
+                        <canvas class="graph" id="line-chart6"style="height: 186px;"></canvas>
+                        <canvas class="graph" id="line-chart7"style="height: 186px;"></canvas>
+                        <canvas class="graph" id="line-chart8" style="height: 186px;"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-section">
+                <div id="map"></div>
+                <div class="inputlatlong">
+                    <div class="missionTime">
+                        <div class="time">
+                            <h1>Mission Time</h1>
+                            <div class="missionTime">
+                                <span id="hrs">00</span>
+                                <span>:</span>
+                                <span id="min">00</span>
+                                <span>:</span>
+                                <span id="sec">00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="packet-counter">
+                        <div class="time">
+                            <h1>Packets</h1>
+                            <div class="packetTime">
+                                <span id="packets-received">0</span>
+                                <span>/</span>
+                                <span id="packets-displayed">0</span>
+                                <span>/</span>
+                                <span id="packets-failed">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-container">
+                        <label class="yellow-label">Latitude:</label>
+                        <span id="latitude-display" class="tall">00.00</span>
+                    </div>
+                    <div class="input-container">
+                        <label class="yellow-label">Longitude:</label>
+                        <span id="longitude-display" class="tall">00.00</span>
+                    </div>
+                    <div class="input-container">
+                        <label class="yellow-label">Altitude:</label>
+                        <span id="altitude-display" class="tall">00.00</span>
+                    </div>
+                </div>
+                <div class="command">
+                    <div class="output">
+                        <h3 class="cmd-heading">Command Prompt</h3>
+                        <div id="command-history"></div>
+                    </div>
+                    <div class="input">
+                        <span>&gt;</span>
+                        <input type="text" id="user-input" placeholder="Type a command..." />
+                    </div>
+                    <div class="quick-commands">
+                        <div class="command-row">
+                            <button class="cmd-button toggle" data-command-on="CMD,3101,CX,ON" data-command-off="CMD,3101,CX,OFF" data-state="off">Telemetry OFF</button>
+                            <button class="cmd-button toggle" data-command-on="CMD,3101,MEC,ON" data-command-off="CMD,3101,MEC,OFF" data-state="off">Autogyro OFF</button>
+                            <button class="cmd-button toggle" data-command-on="CMD,3101,MEC,NON" data-command-off="CMD,3101,MEC,NOFF" data-state="off">Nosecone Release</button>
+                        </div>
+                        <div class="command-row">
+                            <button class="cmd-button" data-command="CMD,3101,CAL">Calibrate</button>
+                            <button class="cmd-button" data-command="CMD,3101,ST,GPS">Set Time</button>
+                            <button class="cmd-button" data-command="CMD,3101,IDLE">Reset State</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div id="graph-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <canvas id="modal-graph"></canvas>
+        </div>
+    </div>
+</body>
+</html> 
